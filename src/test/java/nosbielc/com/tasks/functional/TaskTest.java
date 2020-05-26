@@ -3,9 +3,13 @@ package nosbielc.com.tasks.functional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
@@ -16,9 +20,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class TaskTest {
 
-    public WebDriver acessarDriver() {
-        WebDriver driver = new ChromeDriver();
-        driver.navigate().to("http://localhost:7000/tasks/");
+    public WebDriver acessarDriver() throws MalformedURLException {
+//        WebDriver driver = new ChromeDriver();  //Drive basico
+        URL remoteAddress;
+        Capabilities desiredCapabilities = DesiredCapabilities.chrome();
+        WebDriver driver = new RemoteWebDriver(
+                new URL("http://192.168.1.106:4444/wd/hub"), desiredCapabilities);
+        driver.navigate().to("http://192.168.1.106:7000/tasks/");
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -26,7 +34,7 @@ public class TaskTest {
     }
 
     @Test
-    public void deveSalvarTarefaComSucesso() {
+    public void deveSalvarTarefaComSucesso() throws MalformedURLException {
         WebDriver driver = acessarDriver();
         try {
 
@@ -50,7 +58,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvarTarefaSemDescricao() {
+    public void naoDeveSalvarTarefaSemDescricao() throws MalformedURLException {
         WebDriver driver = acessarDriver();
         try {
 
@@ -72,7 +80,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvarTarefaSemData() {
+    public void naoDeveSalvarTarefaSemData() throws MalformedURLException {
         WebDriver driver = acessarDriver();
         try {
 
@@ -92,7 +100,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvarTarefaComDataPassada() {
+    public void naoDeveSalvarTarefaComDataPassada() throws MalformedURLException {
         WebDriver driver = acessarDriver();
         try {
 
